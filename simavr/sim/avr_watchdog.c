@@ -183,7 +183,13 @@ static void avr_watchdog_irq_notify(
 	 */
 
 	if (!value && avr_regbit_get(avr, p->watchdog.raised) && avr_regbit_get(avr, p->wde)) {
-		avr_regbit_clear(avr, p->watchdog.enable);
+		/* It seems to me once activated WD it should never auto disable...
+		 * Edilson Azevedo <ekazevedo@github.com>
+		 * Problem happen with Arduino FreeRTOS: no Ticks increment, and, of course, nothing else.
+		 * Firmware run fine on a real Arduino Mega2560.
+		 * After "commenting" the line below both, real and simulated, work fine.
+		 */
+		// avr_regbit_clear(avr, p->watchdog.enable);
 	}
 }
 		
